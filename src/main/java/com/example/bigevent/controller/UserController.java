@@ -3,6 +3,7 @@ package com.example.bigevent.controller;
 import com.example.bigevent.pojo.Result;
 import com.example.bigevent.pojo.User;
 import com.example.bigevent.service.UserService;
+import com.example.bigevent.utils.JwtUtil;
 import com.example.bigevent.utils.Md5Util;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -40,14 +44,18 @@ public class UserController {
         //根据用户名查询用户
         User loginUser = userService.findByUserName(username);
         //判断用户是否存在
-        if(loginUser == null){
+        if (loginUser == null) {
             return Result.error("用户不存在！");
         }
 
         // 判断密码是否正确
-        if(Md5Util.getMD5String(password).equals(loginUser.getPassword())){
+        if (Md5Util.getMD5String(password).equals(loginUser.getPassword())) {
             //登录成功
-            return Result.success("jwt token令牌");
+            Map<String,Object> claims = new HashMap<>();
+            claims.put("id",loginUser.getId());
+            claims.put("username",loginUser.getUsername());
+            String token = JwtUtil.genToken(claims);
+            return Result.success(token);
         }
 
         return Result.error("密码错误！");
