@@ -46,4 +46,9 @@ public class UserServiceImpl implements UserService {
     public void updatePwd(String newPwd, Integer id) {
         userMapper.updatePwd(Md5Util.getMD5String(newPwd),id);
     }
+
+    @Override
+    public User findUserById(Integer id) {
+        return userMapper.findUserById(id);
+    }
 }

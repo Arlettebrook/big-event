@@ -2,8 +2,8 @@ package com.example.bigevent.service.impl;
 
 import com.example.bigevent.mapper.CategoryMapper;
 import com.example.bigevent.pojo.Category;
+import com.example.bigevent.pojo.User;
 import com.example.bigevent.service.CategoryService;
-import com.example.bigevent.utils.JwtUtil;
 import com.example.bigevent.utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,5 +45,10 @@ public class CategoryServiceImpl implements CategoryService {
     public void update(Category category) {
         category.setUpdateTime(LocalDateTime.now());
         categoryMapper.update(category);
+    }
+
+    @Override
+    public void delete(Integer id) {
+        categoryMapper.delete(id);
     }
 }
