@@ -16,7 +16,7 @@ public class CategoryController {
     @Autowired
     CategoryService categoryService;
 
-//    添加文章分类
+    //    添加文章分类
     @PostMapping
     public Result add(@RequestBody @Validated Category category) {
         categoryService.add(category);
@@ -25,8 +25,16 @@ public class CategoryController {
 
     //查询当前用户的所有文章分类列表
     @GetMapping
-    public Result<List<Category>> list(){
-       List<Category> categories = categoryService.list();
+    public Result<List<Category>> list() {
+        List<Category> categories = categoryService.list();
         return Result.success(categories);
+    }
+
+
+    //获取文章分类详情：根据id查询
+    @GetMapping("/detail")
+    public Result<Category> detail(Integer id) {
+        Category category = categoryService.findById(id);
+        return Result.success(category);
     }
 }
