@@ -9,6 +9,7 @@ import com.example.bigevent.utils.ThreadLocalUtil;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -68,7 +69,7 @@ public class UserController {
 //        String username = (String) map.get("username");
 
 //        使用ThreadLocal获取业务数据
-        Map<String,Object> map = ThreadLocalUtil.get();
+        Map<String, Object> map = ThreadLocalUtil.get();
         String username = (String) map.get("username");
 //        根据用户名查询用户，获取用户信息
         User user = userService.findByUserName(username);
@@ -76,22 +77,55 @@ public class UserController {
     }
 
     @PutMapping("update")
-    public Result update(@RequestBody @Validated User user){
+    public Result update(@RequestBody @Validated User user) {
 //        判断修改的信息是否与token一直：防止修改别人的
-        Map<String,Object> map = ThreadLocalUtil.get();
+        Map<String, Object> map = ThreadLocalUtil.get();
         Integer id = (Integer) map.get("id");
-        if(id.equals(user.getId())){
+        if (id.equals(user.getId())) {
             userService.update(user);
             return Result.success();
-        }else{
+        } else {
             return Result.error("修改失败！");
         }
 
     }
 
     @PatchMapping("updateAvatar")
-    public Result updateAvatar(@RequestParam @URL String avatarUrl){
+    public Result updateAvatar(@RequestParam @URL String avatarUrl) {
         userService.updateAvatar(avatarUrl);
+        return Result.success();
+    }
+
+    @PatchMapping("/updatePwd")
+    public Result updatePwd(@RequestBody Map<String, String> params) {
+//        获取密码参数
+        String oldPwd = params.get("old_pwd");
+        String newPwd = params.get("new_pwd");
+        String rePwd = params.get("re_pwd");
+
+//        参数校验
+        if (!StringUtils.hasLength(oldPwd) || !StringUtils.hasLength(newPwd) || !StringUtils.hasLength(rePwd)) {
+            return Result.error("缺少必要的参数！");
+        }
+
+//        从token中获取username，以及id
+        Map<String, Object> map = ThreadLocalUtil.get();
+        String username = (String) map.get("username");
+        Integer id = (Integer) map.get("id");
+
+//        判断旧密码是否正确
+//       获取当前用户密码
+        User user = userService.findByUserName(username);
+        if (!user.getPassword().equals(Md5Util.getMD5String(oldPwd))) {
+            return Result.error("原密码错误！");
+        }
+
+//        判断新密码是否一直
+        if (!newPwd.equals(rePwd)) {
+            return Result.error("两次填写的新密码不一样！");
+        }
+        // 以上都满足去修改密码
+        userService.updatePwd(newPwd, id);
         return Result.success();
     }
 }
