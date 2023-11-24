@@ -4,6 +4,7 @@ import com.example.bigevent.pojo.Category;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -19,4 +20,7 @@ public interface CategoryMapper {
 
     @Select("select * from category where id=#{id}")
     Category findById(Integer id);
+
+    @Update("update category set category_name=#{categoryName},category_alias=#{categoryAlias},update_time=#{updateTime} where id=#{id}")
+    void update(Category category);
 }
