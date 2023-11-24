@@ -73,4 +73,18 @@ public class UserController {
         User user = userService.findByUserName(username);
         return Result.success(user);
     }
+
+    @PutMapping("update")
+    public Result update(@RequestBody @Validated User user){
+//        判断修改的信息是否与token一直：防止修改别人的
+        Map<String,Object> map = ThreadLocalUtil.get();
+        Integer id = (Integer) map.get("id");
+        if(id.equals(user.getId())){
+            userService.update(user);
+            return Result.success();
+        }else{
+            return Result.error("修改失败！");
+        }
+
+    }
 }
