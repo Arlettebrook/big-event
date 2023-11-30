@@ -14,6 +14,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/category")
+@Validated
 public class CategoryController {
 
     @Autowired
@@ -50,7 +51,7 @@ public class CategoryController {
 
     //删除文章分类：根据id进行删除
     @DeleteMapping
-    public Result delete(Integer id){
+    public Result delete(@NotEmpty Integer id){
         //        判断是否有权利就删除
         Map<String,Object> map = ThreadLocalUtil.get();
         Integer userId = (Integer) map.get("id");

@@ -88,4 +88,24 @@ public class ArticleServiceImpl implements ArticleService {
 
         return Result.success();
     }
+
+    @Override
+    public Result deleteById(Integer id) {
+        // 判断有吗权限删除
+        Article articleById = articleMapper.getArticleById(id);
+        if(articleById == null ){
+            return Result.error("文章不存在");
+        }
+        // 从ThreadLocal中获取数据
+        Map<String,Object> map = ThreadLocalUtil.get();
+        Integer userId = (Integer) map.get("id");
+
+        // 判断是不是同一个登录的用户
+        if(!userId.equals(articleById.getCreateUser())){
+            return Result.error("没有权限删除");
+        }
+
+        articleMapper.deleteById(id);
+        return Result.success();
+    }
 }

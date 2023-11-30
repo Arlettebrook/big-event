@@ -15,4 +15,6 @@ public interface ArticleService {
 
     // 更新文章
     Result update(Article article);
+
+    Result deleteById(Integer id);
 }

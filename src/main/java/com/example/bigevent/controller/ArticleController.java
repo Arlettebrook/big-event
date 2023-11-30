@@ -71,4 +71,11 @@ public class ArticleController {
     public Result update(@RequestBody @Validated(Article.Update.class) Article article){
         return articleService.update(article);
     }
+
+    //  删除文章
+    @DeleteMapping
+    public Result delete(@NotNull Integer id){
+
+        return articleService.deleteById(id);
+    }
 }
