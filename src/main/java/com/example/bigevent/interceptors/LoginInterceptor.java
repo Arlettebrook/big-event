@@ -3,6 +3,7 @@ package com.example.bigevent.interceptors;
 import com.example.bigevent.pojo.Result;
 import com.example.bigevent.utils.JwtUtil;
 import com.example.bigevent.utils.ThreadLocalUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
@@ -27,6 +28,12 @@ public class LoginInterceptor implements HandlerInterceptor {
         } catch (Exception e) {
 //            http响应状态码为401
             response.setStatus(401);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("utf-8");
+            // 返回用户未登录json
+            ObjectMapper objectMapper = new ObjectMapper();
+            String note = objectMapper.writeValueAsString(Result.error("用户未登录"));
+            response.getWriter().write(note);
             return false;
         }
 

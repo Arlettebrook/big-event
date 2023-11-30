@@ -6,6 +6,7 @@ import com.example.bigevent.pojo.Result;
 import com.example.bigevent.service.ArticleService;
 import com.example.bigevent.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -16,6 +17,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/article")
+@Validated
 public class ArticleController {
 
     @Autowired
@@ -55,5 +57,12 @@ public class ArticleController {
     ) {
         PageBean<Article> pageBean = articleService.list(pageNum, pageSize, categoryId, state);
         return Result.success(pageBean);
+    }
+
+    // 获取文章详情
+    @GetMapping("/detail")
+    public Result detail(@NotNull Integer id) {
+
+        return articleService.detail(id);
     }
 }

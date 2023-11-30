@@ -3,6 +3,7 @@ package com.example.bigevent.service.impl;
 import com.example.bigevent.mapper.ArticleMapper;
 import com.example.bigevent.pojo.Article;
 import com.example.bigevent.pojo.PageBean;
+import com.example.bigevent.pojo.Result;
 import com.example.bigevent.service.ArticleService;
 import com.example.bigevent.utils.ThreadLocalUtil;
 import com.github.pagehelper.Page;
@@ -44,7 +45,7 @@ public class ArticleServiceImpl implements ArticleService {
         // 3.调用mapper
         Map<String, Object> map = ThreadLocalUtil.get();
         Integer userId = (Integer) map.get("id");
-        List<Article> articles = articleMapper.list(userId,categoryId,state);
+        List<Article> articles = articleMapper.list(userId, categoryId, state);
 //        log.info("articles:"+articles.toString());
 
         // Page中提供了方法，可以获取到PageHelper分页查询后，得到的总记录数和当前页数据
@@ -55,5 +56,14 @@ public class ArticleServiceImpl implements ArticleService {
         pageBean.setTotal(page.getTotal());
         pageBean.setItems(page.getResult());
         return pageBean;
+    }
+
+    @Override
+    public Result detail(Integer id) {
+        Article article = articleMapper.getArticleById(id);
+        if (article == null) {
+            return Result.error("文章不存在");
+        }
+        return Result.success(article);
     }
 }
