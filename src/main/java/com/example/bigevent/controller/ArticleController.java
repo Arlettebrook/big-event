@@ -42,7 +42,7 @@ public class ArticleController {
 
     @PostMapping
     // 新增文章
-    public Result add(@RequestBody @Validated Article article) {
+    public Result add(@RequestBody @Validated(Article.add.class) Article article) {
         articleService.add(article);
         return Result.success();
     }
@@ -64,5 +64,11 @@ public class ArticleController {
     public Result detail(@NotNull Integer id) {
 
         return articleService.detail(id);
+    }
+
+    // 更新文章
+    @PutMapping
+    public Result update(@RequestBody @Validated(Article.Update.class) Article article){
+        return articleService.update(article);
     }
 }

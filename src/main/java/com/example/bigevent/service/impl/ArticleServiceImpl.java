@@ -66,4 +66,26 @@ public class ArticleServiceImpl implements ArticleService {
         }
         return Result.success(article);
     }
+
+    @Override
+    public Result update(Article article) {
+        // 更新信息
+        article.setUpdateTime(LocalDateTime.now());
+        // 判断是否有有权限修改
+        Map<String,Object> map = ThreadLocalUtil.get();
+        Integer userId = (Integer) map.get("id");
+
+        Article articleById = articleMapper.getArticleById(article.getId());
+        if(articleById == null){
+            return Result.error("文章不存在");
+        }
+
+        if(!userId.equals(articleById.getCreateUser())){
+            return Result.error("不允许修改，权限不足");
+        }
+
+        articleMapper.update(article);
+
+        return Result.success();
+    }
 }
