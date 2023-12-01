@@ -4,6 +4,19 @@ spring:
     url: jdbc:mysql://localhost:3306/big_event
     username: root
     password: aoao6202
+  data:
+    redis:
+      host: 192.168.245.129
+      password: aoao6202
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: 100ms
+      database: 1
+
+
 mybatis:
   configuration:
     map-underscore-to-camel-case: true #开启驼峰式自动映射

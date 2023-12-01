@@ -24,6 +24,6 @@ public class UploadFileController {
         }
         String filename = UUID.randomUUID().toString().replace("-", "") + originalFilename.substring(originalFilename.lastIndexOf("."));
         file.transferTo(new File("F:\\Node\\Springboot3_project\\avatar\\" + filename));
-        return Result.success("用户头像url地址");
+        return Result.success("用户头像url地址:"+filename);
     }
 }
