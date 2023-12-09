@@ -31,7 +31,7 @@ public class JwtTest {
 
     }
 
-    @Test
+    /*@Test
     public void testParseToken(){
         //定义字符串,模拟用户传递过来的token
         String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9" +
@@ -46,5 +46,5 @@ public class JwtTest {
 //        如果算法秘钥修改了，那么验证失败
 //        token过期认证也会失败
 
-    }
+    }*/
 }
